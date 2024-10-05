@@ -1,3 +1,7 @@
+import 'package:coffe_app/dataModel.dart';
+import 'package:coffe_app/pages/offerspage.dart';
+import 'package:coffe_app/pages/menupage.dart';
+import 'package:coffe_app/pages/orderspage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Coffee on Move',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 44, 27, 1)),
+            seedColor: const Color.fromARGB(255, 93, 47, 2)),
         useMaterial3: true,
       ),
       home: const MyHomePage(),
@@ -30,21 +34,60 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var selectedPage = 0;
+
   @override
   Widget build(BuildContext context) {
+    Widget currentWidget = const MenuPage();
+
+    switch (selectedPage) {
+      case 0:
+        currentWidget = const MenuPage();
+        break;
+      case 1:
+        currentWidget = const OffersPage();
+        break;
+      case 2:
+        currentWidget = const OrdersPage();
+        break;
+      default:
+        currentWidget = const HelloWord();
+    }
+
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Image.asset('images/logo.png')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const HelloWord(),
-            const AbaBoys(),
-          ],
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Image.asset(
+          'images/logo.png',
+          height: 800,
+          width: 800,
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: selectedPage,
+          onTap: (index) {
+            setState(() {
+              selectedPage = index;
+            });
+          },
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          selectedItemColor: Colors.yellow.shade100,
+          unselectedItemColor: Colors.brown.shade100,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.coffee),
+              label: 'Menu',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_offer),
+              label: 'Offers',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart_checkout),
+              label: 'Cart',
+            ),
+          ]),
+      body: currentWidget,
     );
   }
 }
