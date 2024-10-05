@@ -7,10 +7,10 @@ class OffersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: 20,
+      itemCount: 2,
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+        return const Padding(
+          padding: EdgeInsets.only(bottom: 16),
           child: Offer(
             title: "Americano",
             description: "Buy 1 get 1 free",

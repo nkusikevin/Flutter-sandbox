@@ -1,44 +1,71 @@
+import 'package:coffe_app/datamanager.dart';
 import 'package:flutter/material.dart';
 import 'package:coffe_app/dataModel.dart';
 
 class MenuPage extends StatelessWidget {
-  const MenuPage({super.key});
+  final DataManager dataManager;
+
+  const MenuPage({super.key, required this.dataManager});
 
   void _handleAddToCart(Product product) {
-    // Implement your logic here
-    print("Added ${product.name} to cart");
+    dataManager.cartAdd(product);
   }
 
   @override
   Widget build(BuildContext context) {
-    var products = [
-      Product(
-        id: 1,
-        name: 'Cappuccino',
-        description: 'Espresso with milk and milk foam',
-        price: 3.5,
-        image: 'images/black_coffee.png',
-      ),
-      // Add more products here
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu', style: Theme.of(context).textTheme.headlineMedium),
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: ProductItem(
-              product: products[index],
-              onAddToCart: _handleAddToCart,
-            ),
-          );
+      body: FutureBuilder<List<Category>>(
+        future: dataManager.getMenu(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No categories available'));
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final category = snapshot.data![index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        category.name,
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: category.products.length,
+                      itemBuilder: (context, productIndex) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: ProductItem(
+                            product: category.products[productIndex],
+                            onAddToCart: _handleAddToCart,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         },
       ),
     );
@@ -68,8 +95,8 @@ class ProductItem extends StatelessWidget {
             ClipRRect(
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(12)),
-              child: Image.asset(
-                product.image,
+              child: Image.network(
+                product.imageUrl,
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,

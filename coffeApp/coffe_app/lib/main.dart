@@ -1,4 +1,5 @@
 import 'package:coffe_app/dataModel.dart';
+import 'package:coffe_app/datamanager.dart';
 import 'package:coffe_app/pages/offerspage.dart';
 import 'package:coffe_app/pages/menupage.dart';
 import 'package:coffe_app/pages/orderspage.dart';
@@ -34,21 +35,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var dataManager = DataManager();
   var selectedPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    Widget currentWidget = const MenuPage();
+    Widget currentWidget = MenuPage(dataManager: dataManager);
 
     switch (selectedPage) {
       case 0:
-        currentWidget = const MenuPage();
+        currentWidget = MenuPage(dataManager: dataManager);
         break;
       case 1:
         currentWidget = const OffersPage();
         break;
       case 2:
-        currentWidget = const OrdersPage();
+        currentWidget = OrderPage(dataManager: dataManager);
         break;
       default:
         currentWidget = const HelloWord();
