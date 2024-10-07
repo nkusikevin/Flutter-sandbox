@@ -4,7 +4,7 @@ import 'package:shoes_shop/models/shoe.dart';
 class ShoeTile extends StatelessWidget {
   Shoe shoe;
   void Function()? addTocart;
-  ShoeTile({super.key, required this.shoe , required this.addTocart});
+  ShoeTile({super.key, required this.shoe, required this.addTocart});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,12 @@ class ShoeTile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Center(
-              child: Text(
-                shoe.description,
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+            child: Text(
+              shoe.description,
+              style: TextStyle(color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Padding(
@@ -38,16 +39,22 @@ class ShoeTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      shoe.name,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text("\$${shoe.price}"),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        shoe.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text("\$${shoe.price}"),
+                    ],
+                  ),
                 ),
                 GestureDetector(
                   onTap: addTocart,
