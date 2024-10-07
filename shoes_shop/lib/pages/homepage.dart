@@ -33,6 +33,93 @@ class _HomePageState extends State<HomePage> {
           navigateBottomBar(index);
         },
       ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Builder(builder: (context) {
+          return IconButton(
+              onPressed: () => {
+                    Scaffold.of(context).openDrawer(),
+                  },
+              icon: const Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                ),
+              ));
+        }),
+      ),
+      drawer: Drawer(
+        backgroundColor: Colors.grey[900],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                DrawerHeader(
+                    child: Image.asset(
+                  "images/logo.png",
+                  color: Colors.white,
+                )),
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Divider(
+                      color: Colors.grey,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.home,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      "Home",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.info,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      "About",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0, bottom: 25),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
       body: _pages[_selectedIndex],
     );
   }
