@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tasksapp/data/database.dart';
 import 'package:tasksapp/todo_tile.dart';
 import 'package:tasksapp/util/dialog_box.dart';
 
@@ -10,25 +12,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List tasks = [
-    ["Make an app", false],
-    ["Make a website", false],
-    ["Make a game", false],
-    ["Make a video", false],
-    ["Make a song", false],
-  ];
+  final _mybox = Hive.box('tasks');
+  TasksDataBase tasksDataBase = TasksDataBase();
+
+  @override
+  void initState() {
+    if (_mybox.get('tasks') == null) {
+      tasksDataBase.creatInitialData();
+    } else {
+      tasksDataBase.loadData();
+    }
+    super.initState();
+  }
 
   void onSubmit(String value) {
     setState(() {
-      tasks.add([value, false]);
+      tasksDataBase.tasks.add([value, false]);
     });
+    tasksDataBase.updateData();
   }
 
   void onCreateTask(String value) {
-    print(value);
     setState(() {
-      tasks.add([value, false]);
+      tasksDataBase.tasks.add([value, false]);
     });
+    tasksDataBase.updateData();
   }
 
   void _addTask() {
@@ -42,13 +50,16 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  void _removeTask() {
-    // Remove a task
+  void removeTask(int index) {
+    setState(() {
+      tasksDataBase.tasks.removeAt(index);
+    });
+    tasksDataBase.updateData();
   }
 
   void taskChanged(bool? value, int index) {
     setState(() {
-      tasks[index][1] = !tasks[index][1];
+      tasksDataBase.tasks[index][1] = !tasksDataBase.tasks[index][1];
     });
   }
 
@@ -57,19 +68,27 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       appBar: AppBar(
-        title: const Text('Tasks App'),
+        title: const Text(
+          'Tasks App',
+          style: TextStyle(
+            color: Color.fromARGB(255, 57, 57, 57),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
         foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
       ),
       body: ListView.builder(
-        itemCount: tasks.length,
+        itemCount: tasksDataBase.tasks.length,
         itemBuilder: (context, index) {
           return TodoTile(
-            task: tasks[index][0],
-            taskCompleted: tasks[index][1],
+            task: tasksDataBase.tasks[index][0],
+            taskCompleted: tasksDataBase.tasks[index][1],
             onChanged: (value) => taskChanged(value, index),
+            deleteFunction: (context) => removeTask(index),
           );
         },
       ),
