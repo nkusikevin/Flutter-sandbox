@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasksapp/todo_tile.dart';
+import 'package:tasksapp/util/dialog_box.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,8 +18,28 @@ class _HomePageState extends State<HomePage> {
     ["Make a song", false],
   ];
 
+  void onSubmit(String value) {
+    setState(() {
+      tasks.add([value, false]);
+    });
+  }
+
+  void onCreateTask(String value) {
+    print(value);
+    setState(() {
+      tasks.add([value, false]);
+    });
+  }
+
   void _addTask() {
-    print("You added a task");
+    showDialog(
+        context: context,
+        builder: (context) {
+          return DialogBox(
+            onSubmit: onSubmit,
+            onCreateTask: onCreateTask,
+          );
+        });
   }
 
   void _removeTask() {
