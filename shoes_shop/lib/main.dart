@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shoes_shop/models/cart.dart';
 import 'package:shoes_shop/pages/introPage.dart';
 
 void main() {
@@ -11,10 +13,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "Nike Store",
-      debugShowCheckedModeBanner: false,
-      home: Intropage(),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => Cart(),
+        builder: (context, child) => const MaterialApp(
+              title: "Nike Store",
+              debugShowCheckedModeBanner: false,
+              home: Intropage(),
+            ));
   }
 }
