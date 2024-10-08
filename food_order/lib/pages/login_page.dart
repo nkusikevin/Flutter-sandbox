@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_order/components/custom_button.dart';
 import 'package:food_order/components/custom_input.dart';
+import 'package:food_order/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? onTap;
@@ -15,6 +16,18 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
+
+  void login() {
+    print("Email: ${emailController.text}");
+    print("Password: ${passwordController.text}");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               onTap: () {
                 print("Email: ${emailController.text}");
                 print("Password: ${passwordController.text}");
+                login();
               },
             ),
             const SizedBox(height: 20),
@@ -67,7 +81,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    widget.onTap!();
+                  },
                   child: TextButton(
                     onPressed: () {
                       widget.onTap!();

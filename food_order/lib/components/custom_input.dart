@@ -23,14 +23,15 @@ class CustomInput extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-          ),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+              borderRadius: BorderRadius.circular(50)),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.primary,
             ),
+            borderRadius: BorderRadius.circular(50),
           ),
         ),
       ),
