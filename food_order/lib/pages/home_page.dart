@@ -7,6 +7,7 @@ import 'package:food_order/components/my_tab_bar.dart';
 import 'package:food_order/components/silver_app_bar.dart';
 import 'package:food_order/model/food.dart';
 import 'package:food_order/model/restaurant.dart';
+import 'package:food_order/pages/food_page.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,7 +48,9 @@ class _HomePageState extends State<HomePage>
             return FoodTile(
               food: foods[index],
               onTap: () {
-                print("Food: ${foods[index].name}");
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return FoodPage(food: foods[index]);
+                }));
               },
             );
           });

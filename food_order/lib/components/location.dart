@@ -5,29 +5,27 @@ class CurrentLocation extends StatelessWidget {
 
   void openLocationBox(BuildContext context) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Your Location"),
-          content: Column(
-            children: [
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: "Enter your location",
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Your Location'),
+              content: const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search address...',
                 ),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Submit"),
-              )
-            ],
-          ),
-        );
-      },
-    );
+              actions: [
+                //cancel button
+                MaterialButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                //save button
+                MaterialButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Save'),
+                ),
+              ],
+            ));
   }
 
   @override
@@ -51,7 +49,8 @@ class CurrentLocation extends StatelessWidget {
                     color: Theme.of(context).colorScheme.inversePrimary,
                     fontWeight: FontWeight.bold),
               ),
-              Icon(Icons.keyboard_arrow_down_rounded),
+              Icon(Icons.arrow_drop_down,
+                  color: Theme.of(context).colorScheme.primary),
             ],
           ),
         )
