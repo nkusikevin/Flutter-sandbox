@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:food_order/components/description_box.dart';
 import 'package:food_order/components/drawer.dart';
+import 'package:food_order/components/food_tile.dart';
 import 'package:food_order/components/location.dart';
 import 'package:food_order/components/my_tab_bar.dart';
 import 'package:food_order/components/silver_app_bar.dart';
+import 'package:food_order/model/food.dart';
+import 'package:food_order/model/restaurant.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,13 +23,35 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController =
+        TabController(length: FoodCategory.values.length, vsync: this);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  List<Food> _filterMenuByCategory(FoodCategory category, List<Food> _menu) {
+    return _menu.where((food) => food.category == category).toList();
+  }
+
+  List<Widget> _getFoodThisCategory(List<Food> _menu) {
+    return FoodCategory.values.map((category) {
+      List<Food> foods = _filterMenuByCategory(category, _menu);
+      return ListView.builder(
+          itemCount: foods.length,
+          padding: EdgeInsets.zero,
+          itemBuilder: (context, index) {
+            return FoodTile(
+              food: foods[index],
+              onTap: () {
+                print("Food: ${foods[index].name}");
+              },
+            );
+          });
+    }).toList();
   }
 
   @override
@@ -50,31 +76,13 @@ class _HomePageState extends State<HomePage>
               ),
             )
           ],
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text("Home $index"),
-                    );
-                  }),
-              ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text("Setting $index"),
-                    );
-                  }),
-              ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text("Profile $index"),
-                    );
-                  }),
-            ],
+          body: Consumer<Restaurant>(
+            builder: (context, restaurant, child) {
+              return TabBarView(
+                controller: _tabController,
+                children: _getFoodThisCategory(restaurant.menu),
+              );
+            },
           ),
         ));
   }
