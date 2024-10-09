@@ -18,7 +18,7 @@ class Overview extends StatelessWidget {
         'title': 'Completed ',
         'description': '2 ',
         'icon': Ionicons.checkmark_done_circle,
-        'color': Color.fromRGBO(160, 240, 217, 0.965)
+        'color': Color.fromRGBO(20, 142, 1, 0.965)
       },
       {
         'title': 'Pending ',

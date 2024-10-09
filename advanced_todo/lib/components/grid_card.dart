@@ -21,8 +21,10 @@ class _GridCardState extends State<GridCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: widget.color,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: widget.color,
+        ),
       ),
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -31,7 +33,7 @@ class _GridCardState extends State<GridCard> {
           Icon(
             widget.icon,
             size: 50,
-            color: Colors.white,
+            color: widget.color,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,7 +47,7 @@ class _GridCardState extends State<GridCard> {
               Text(
                 widget.description,
                 style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ],
           ),

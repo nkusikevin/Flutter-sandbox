@@ -15,7 +15,16 @@ class _CreateTaskState extends State<CreateTask> {
   String _startTime = '';
   String _endTime = '';
   String _priority = '';
+  String _category = '';
   String _description = '';
+
+  final List<DropdownMenuEntry<String>> _categories = const [
+    DropdownMenuEntry(value: 'Work', label: 'Work'),
+    DropdownMenuEntry(value: 'Personal', label: 'Personal'),
+    DropdownMenuEntry(value: 'Health', label: 'Health'),
+    DropdownMenuEntry(value: 'Finance', label: 'Finance'),
+    DropdownMenuEntry(value: 'Other', label: 'Other'),
+  ];
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -27,6 +36,7 @@ class _CreateTaskState extends State<CreateTask> {
       print('End Time: $_endTime');
       print('Priority: $_priority');
       print('Description: $_description');
+      print('Category: $_category');
     }
   }
 
@@ -51,6 +61,22 @@ class _CreateTaskState extends State<CreateTask> {
                   ),
                 ),
                 onSaved: (value) => _taskName = value ?? '',
+              ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownMenu<String>(
+                  dropdownMenuEntries: _categories,
+                  width: double.infinity,
+                  label: const Text('Category'),
+                  onSelected: (String? value) {
+                    setState(() {
+                      _category = value ?? '';
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 10),
               DateTimeFormField(
