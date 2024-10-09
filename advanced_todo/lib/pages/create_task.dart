@@ -1,14 +1,17 @@
-import 'package:date_field/date_field.dart';
-import 'package:flutter/material.dart';
 
-class CreateTask extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:date_field/date_field.dart';
+import 'package:advanced_todo/model/tasksDataModel.dart';
+
+class CreateTask extends ConsumerStatefulWidget {
   const CreateTask({super.key});
 
   @override
-  _CreateTaskState createState() => _CreateTaskState();
+  ConsumerState<CreateTask> createState() => _CreateTaskState();
 }
 
-class _CreateTaskState extends State<CreateTask> {
+class _CreateTaskState extends ConsumerState<CreateTask> {
   final _formKey = GlobalKey<FormState>();
   String _taskName = '';
   DateTime? _selectedDate;
@@ -29,14 +32,49 @@ class _CreateTaskState extends State<CreateTask> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // Here you would typically send this data to a state management solution or API
-      print('Task Name: $_taskName');
-      print('Date: $_selectedDate');
-      print('Start Time: $_startTime');
-      print('End Time: $_endTime');
-      print('Priority: $_priority');
-      print('Description: $_description');
-      print('Category: $_category');
+      
+      // Create a new Task object
+      final newTask = Task(
+        id: DateTime.now().millisecondsSinceEpoch.toString(), // Generate a unique ID
+        name: _taskName,
+        startTime: _startTime,
+        endTime: _endTime,
+        date: _selectedDate!.toIso8601String().split('T')[0], // Format date as 'YYYY-MM-DD'
+        description: _description,
+        status: 'pending',
+        priority: _getPriorityEnum(_priority),
+        category: _getCategoryEnum(_category),
+      );
+
+      // Add the new task using the TaskManager
+      ref.read(taskManagerProvider.notifier).addTask(newTask);
+
+      // Navigate back to the previous screen
+      Navigator.of(context).pop();
+    }
+  }
+
+  TaskPriority _getPriorityEnum(String priority) {
+    switch (priority.toLowerCase()) {
+      case 'high':
+        return TaskPriority.high;
+      case 'medium':
+        return TaskPriority.medium;
+      case 'low':
+        return TaskPriority.low;
+      default:
+        return TaskPriority.medium;
+    }
+  }
+
+  TaskCategory _getCategoryEnum(String category) {
+    switch (category.toLowerCase()) {
+      case 'work':
+        return TaskCategory.work;
+      case 'personal':
+        return TaskCategory.personal;
+      default:
+        return TaskCategory.others;
     }
   }
 
@@ -45,6 +83,12 @@ class _CreateTaskState extends State<CreateTask> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Task'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pushNamed(context, '/home');
+          },
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -60,6 +104,12 @@ class _CreateTaskState extends State<CreateTask> {
                     borderSide: BorderSide(color: Colors.black),
                   ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a task name';
+                  }
+                  return null;
+                },
                 onSaved: (value) => _taskName = value ?? '',
               ),
               const SizedBox(height: 10),
@@ -87,10 +137,15 @@ class _CreateTaskState extends State<CreateTask> {
                   ),
                 ),
                 mode: DateTimeFieldPickerMode.date,
-                firstDate: DateTime.now().add(const Duration(days: 10)),
-                lastDate: DateTime.now().add(const Duration(days: 40)),
-                initialPickerDateTime:
-                    DateTime.now().add(const Duration(days: 20)),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+                initialPickerDateTime: DateTime.now(),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a date';
+                  }
+                  return null;
+                },
                 onChanged: (DateTime? value) {
                   setState(() {
                     _selectedDate = value;
@@ -108,6 +163,12 @@ class _CreateTaskState extends State<CreateTask> {
                           borderSide: BorderSide(color: Colors.black),
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter start time';
+                        }
+                        return null;
+                      },
                       onSaved: (value) => _startTime = value ?? '',
                     ),
                   ),
@@ -120,6 +181,12 @@ class _CreateTaskState extends State<CreateTask> {
                           borderSide: BorderSide(color: Colors.black),
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter end time';
+                        }
+                        return null;
+                      },
                       onSaved: (value) => _endTime = value ?? '',
                     ),
                   ),

@@ -15,9 +15,7 @@ class SettingsPage extends ConsumerWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ));
+            Navigator.pushNamed(context, '/home');
           },
         ),
       ),

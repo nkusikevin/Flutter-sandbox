@@ -52,10 +52,7 @@ class SplashPage extends StatelessWidget {
                           color: Theme.of(context).colorScheme.inversePrimary)),
                   child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()));
+                        Navigator.pushNamed(context, '/home');
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.transparent,

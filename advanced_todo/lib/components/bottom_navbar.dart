@@ -26,7 +26,7 @@ class BottomNavbar extends StatelessWidget {
             IconButton(
               icon: const Icon(Ionicons.home_outline),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/home');
               },
             ),
             //add tasks button
@@ -41,12 +41,7 @@ class BottomNavbar extends StatelessWidget {
                 icon: const Icon(Ionicons.add),
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CreateTask(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/create_task');
                 },
               ),
             ),
@@ -54,12 +49,7 @@ class BottomNavbar extends StatelessWidget {
               icon: const Icon(Ionicons.settings_outline),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
-                  ),
-                );
+                Navigator.pushNamed(context, '/settings');
               },
             )
           ],

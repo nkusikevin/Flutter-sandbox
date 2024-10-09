@@ -5,12 +5,16 @@ class TaskTile extends StatelessWidget {
   final String name;
   final String startTime;
   final String endTime;
+  final bool isCompleted;
+  final Function(bool?) onCompletionChanged;
 
   const TaskTile({
     super.key,
     required this.name,
     required this.startTime,
     required this.endTime,
+    required this.isCompleted,
+    required this.onCompletionChanged,
   });
 
   @override
@@ -26,8 +30,8 @@ class TaskTile extends StatelessWidget {
       child: Row(
         children: [
           Checkbox(
-              value: true,
-              onChanged: (value) {},
+             value: isCompleted,
+              onChanged: onCompletionChanged,
               activeColor: Color.fromRGBO(25, 155, 60, 0.6),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
