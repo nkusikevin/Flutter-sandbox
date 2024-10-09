@@ -1,6 +1,7 @@
 import 'package:advanced_todo/pages/create_task.dart';
 import 'package:advanced_todo/pages/setting_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 class BottomNavbar extends StatelessWidget {
   const BottomNavbar({super.key});
@@ -23,7 +24,7 @@ class BottomNavbar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: const Icon(Icons.home),
+              icon: const Icon(Ionicons.home_outline),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -37,7 +38,7 @@ class BottomNavbar extends StatelessWidget {
               width: 60,
               height: 60,
               child: IconButton(
-                icon: const Icon(Icons.add),
+                icon: const Icon(Ionicons.add),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -50,7 +51,7 @@ class BottomNavbar extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Ionicons.settings_outline),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.push(

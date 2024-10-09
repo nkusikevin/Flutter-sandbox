@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavbar(),
       body: Column(
         children: [
-          const Overview(),
+          Overview(),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.all(8.0),

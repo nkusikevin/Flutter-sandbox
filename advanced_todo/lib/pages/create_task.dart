@@ -177,7 +177,7 @@ class _CreateTaskState extends State<CreateTask> {
               const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 width: double.infinity,
@@ -185,7 +185,7 @@ class _CreateTaskState extends State<CreateTask> {
                   onPressed: _submitForm,
                   child: Text('Create Task',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.surface)),
+                          color: Theme.of(context).colorScheme.inversePrimary)),
                 ),
               ),
             ],

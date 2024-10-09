@@ -1,11 +1,38 @@
 import 'package:advanced_todo/components/grid_card.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 class Overview extends StatelessWidget {
-  const Overview({super.key});
+  Overview({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List types = [
+      {
+        'title': ' Tasks',
+        'description': '3 ',
+        'icon': Ionicons.list,
+        'color': Color.fromRGBO(138, 163, 255, 0.965)
+      },
+      {
+        'title': 'Completed ',
+        'description': '2 ',
+        'icon': Ionicons.checkmark_done_circle,
+        'color': Color.fromRGBO(160, 240, 217, 0.965)
+      },
+      {
+        'title': 'Pending ',
+        'description': '1 ',
+        'icon': Ionicons.hourglass,
+        'color': Color.fromRGBO(151, 71, 255, 0.965)
+      },
+      {
+        'title': 'Overdue ',
+        'description': '0 ',
+        'icon': Ionicons.time,
+        'color': Color.fromRGBO(237, 190, 125, 0.965)
+      },
+    ];
     return Center(
       child: GridView.builder(
         shrinkWrap: true,
@@ -17,13 +44,12 @@ class Overview extends StatelessWidget {
           mainAxisSpacing: 20,
           childAspectRatio: 1.5,
         ),
-        itemBuilder: (context, index) {
-          return GridCard(
-              title: 'Tasks',
-              description: '3 tasks',
-              icon: Icons.task,
-              color: Theme.of(context).colorScheme.secondary);
-        },
+        itemBuilder: (context, index) => GridCard(
+          title: types[index]['title'],
+          description: types[index]['description'],
+          icon: types[index]['icon'],
+          color: types[index]['color'],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 class TaskTile extends StatelessWidget {
   final String name;
@@ -16,16 +17,16 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.primaryFixedDim,
         borderRadius: BorderRadius.circular(10),
       ),
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           Checkbox(
-              value: false,
+              value: true,
               onChanged: (value) {},
-              activeColor: Theme.of(context).colorScheme.primary,
+              activeColor: Color.fromRGBO(25, 155, 60, 0.6),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
               )),
@@ -33,9 +34,9 @@ class TaskTile extends StatelessWidget {
             child: ListTile(
               title: Text(
                 name,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               subtitle: Text('$startTime - $endTime'),
@@ -45,11 +46,11 @@ class TaskTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: const Icon(Icons.edit, color: Colors.blue),
+                icon: const Icon(Ionicons.create_outline, color: Colors.blue),
                 onPressed: () {},
               ),
               IconButton(
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                icon: const Icon(Ionicons.trash_outline, color: Colors.red),
                 onPressed: () {},
               ),
             ],
