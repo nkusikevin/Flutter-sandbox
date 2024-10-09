@@ -3,22 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:date_field/date_field.dart';
 import 'package:advanced_todo/model/tasksDataModel.dart';
 
-class CreateTask extends ConsumerStatefulWidget {
-  const CreateTask({super.key});
+class UpdateTaskDialog extends ConsumerStatefulWidget {
+  final Task task;
+
+  const UpdateTaskDialog({Key? key, required this.task}) : super(key: key);
 
   @override
-  ConsumerState<CreateTask> createState() => _CreateTaskState();
+  ConsumerState<UpdateTaskDialog> createState() => _UpdateTaskDialogState();
 }
 
-class _CreateTaskState extends ConsumerState<CreateTask> {
+class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
   final _formKey = GlobalKey<FormState>();
-  String _taskName = '';
-  DateTime? _selectedDate;
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
-  String _priority = '';
-  String _category = '';
-  String _description = '';
+  late String _taskName;
+  late DateTime _selectedDate;
+  late TimeOfDay? _startTime;
+  late TimeOfDay? _endTime;
+  late String _priority;
+  late String _category;
+  late String _description;
 
   final List<DropdownMenuEntry<String>> _categories = const [
     DropdownMenuEntry(value: 'Work', label: 'Work'),
@@ -27,6 +29,24 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
     DropdownMenuEntry(value: 'Finance', label: 'Finance'),
     DropdownMenuEntry(value: 'Other', label: 'Other'),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _taskName = widget.task.name;
+    _selectedDate = DateTime.parse(widget.task.date);
+    _startTime = _parseTimeOfDay(widget.task.startTime);
+    _endTime = _parseTimeOfDay(widget.task.endTime);
+    _priority = widget.task.priority.toString().split('.').last;
+    _category = widget.task.category.toString().split('.').last;
+    _description = widget.task.description;
+  }
+
+  TimeOfDay? _parseTimeOfDay(String time) {
+    if (time.isEmpty) return null;
+    final parts = time.split(':');
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -40,23 +60,23 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
           ? '${_endTime!.hour.toString().padLeft(2, '0')}:${_endTime!.minute.toString().padLeft(2, '0')}'
           : '';
 
-      // Create a new Task object
-      final newTask = Task(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      // Create an updated Task object
+      final updatedTask = Task(
+        id: widget.task.id,
         name: _taskName,
         startTime: startTimeString,
         endTime: endTimeString,
-        date: _selectedDate!.toIso8601String().split('T')[0],
+        date: _selectedDate.toIso8601String().split('T')[0],
         description: _description,
-        status: 'pending',
+        status: widget.task.status,
         priority: _getPriorityEnum(_priority),
         category: _getCategoryEnum(_category),
       );
 
-      // Add the new task using the TaskManager
-      ref.read(taskManagerProvider.notifier).addTask(newTask);
+      // Update the task using the TaskManager
+      ref.read(taskManagerProvider.notifier).updateTask(updatedTask);
 
-      // Navigate back to the previous screen
+      // Close the dialog
       Navigator.of(context).pop();
     }
   }
@@ -87,29 +107,19 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Task'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
-        ),
-      ),
-      body: Form(
+    return AlertDialog(
+      title: const Text('Update Task'),
+      content: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(10),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 10),
               TextFormField(
+                initialValue: _taskName,
                 decoration: const InputDecoration(
                   labelText: 'Task Name',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
+                  border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -125,6 +135,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: DropdownMenu<String>(
+                  initialSelection: _category,
                   dropdownMenuEntries: _categories,
                   width: double.infinity,
                   label: const Text('Category'),
@@ -137,16 +148,14 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
               ),
               const SizedBox(height: 10),
               DateTimeFormField(
+                initialValue: _selectedDate,
                 decoration: const InputDecoration(
                   labelText: 'Enter Date',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
+                  border: OutlineInputBorder(),
                 ),
                 mode: DateTimeFieldPickerMode.date,
                 firstDate: DateTime.now(),
                 lastDate: DateTime.now().add(const Duration(days: 365)),
-                initialPickerDateTime: DateTime.now(),
                 validator: (value) {
                   if (value == null) {
                     return 'Please select a date';
@@ -155,7 +164,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
                 },
                 onChanged: (DateTime? value) {
                   setState(() {
-                    _selectedDate = value;
+                    _selectedDate = value!;
                   });
                 },
               ),
@@ -283,33 +292,28 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
               ),
               const SizedBox(height: 10),
               TextFormField(
+                initialValue: _description,
                 decoration: const InputDecoration(
                   labelText: 'Description',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
+                  border: OutlineInputBorder(),
                 ),
                 maxLines: 2,
                 onSaved: (value) => _description = value ?? '',
-              ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: _submitForm,
-                  child: Text('Create Task',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary)),
-                ),
               ),
             ],
           ),
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: _submitForm,
+          child: const Text('Update Task'),
+        ),
+      ],
     );
   }
 }

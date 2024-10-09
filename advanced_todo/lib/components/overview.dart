@@ -9,7 +9,7 @@ class Overview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allTasks = ref.watch(allTasksProvider);
+    final allTasks = ref.watch(totalTasksProvider);
     final completedTasks = ref.watch(completedTasksProvider);
     final pendingTasks = ref.watch(pendingTasksProvider);
     final overdueTasks = ref.watch(overdueTasksProvider);
@@ -17,7 +17,7 @@ class Overview extends ConsumerWidget {
     final List<Map<String, dynamic>> types = [
       {
         'title': 'Tasks',
-        'description': allTasks.length.toString(),
+        'description': allTasks.toString(),
         'icon': Ionicons.list,
         'color': const Color.fromRGBO(138, 163, 255, 0.965)
       },

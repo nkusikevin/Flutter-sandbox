@@ -1,20 +1,18 @@
+import 'package:advanced_todo/components/update_task.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:advanced_todo/model/tasksDataModel.dart';
 
 class TaskTile extends StatelessWidget {
-  final String name;
-  final String startTime;
-  final String endTime;
-  final bool isCompleted;
+  final Task task;
   final Function(bool?) onCompletionChanged;
+  final VoidCallback onDelete;
 
   const TaskTile({
     super.key,
-    required this.name,
-    required this.startTime,
-    required this.endTime,
-    required this.isCompleted,
+    required this.task,
     required this.onCompletionChanged,
+    required this.onDelete,
   });
 
   @override
@@ -30,22 +28,23 @@ class TaskTile extends StatelessWidget {
       child: Row(
         children: [
           Checkbox(
-             value: isCompleted,
-              onChanged: onCompletionChanged,
-              activeColor: Color.fromRGBO(25, 155, 60, 0.6),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
-              )),
+            value: task.isCompleted,
+            onChanged: onCompletionChanged,
+            activeColor: Color.fromRGBO(25, 155, 60, 0.6),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
           Expanded(
             child: ListTile(
               title: Text(
-                name,
+                task.name,
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              subtitle: Text('$startTime - $endTime'),
+              subtitle: Text('${task.startTime} - ${task.endTime}'),
             ),
           ),
           Row(
@@ -53,11 +52,18 @@ class TaskTile extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Ionicons.create_outline, color: Colors.blue),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return UpdateTaskDialog(task: task);
+                    },
+                  );
+                },
               ),
               IconButton(
                 icon: const Icon(Ionicons.trash_outline, color: Colors.red),
-                onPressed: () {},
+                onPressed: onDelete,
               ),
             ],
           ),

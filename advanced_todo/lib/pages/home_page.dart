@@ -20,6 +20,41 @@ class HomePage extends ConsumerWidget {
           taskDate.day == today.day;
     }).toList();
 
+    void handleDelete(String id) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Delete Task'),
+            content: const Text('Are you sure you want to delete this task?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  taskManager.deleteTask(id);
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('DailyDone'),
@@ -55,14 +90,14 @@ class HomePage extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final task = todayTasks[index];
                       return TaskTile(
-                        name: task.name,
-                        startTime: task.startTime,
-                        endTime: task.endTime,
-                        isCompleted: task.isCompleted,
+                        task: task,
                         onCompletionChanged: (bool? newValue) {
                           if (newValue != null) {
                             taskManager.toggleTaskCompletion(task.id);
                           }
+                        },
+                        onDelete: () {
+                          handleDelete(task.id);
                         },
                       );
                     },
