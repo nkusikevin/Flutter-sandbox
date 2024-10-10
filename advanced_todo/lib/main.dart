@@ -5,13 +5,22 @@ import 'package:advanced_todo/pages/create_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:advanced_todo/themes/theme_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('sw') ,Locale('fr')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child: ProviderScope(
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -22,15 +31,14 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
-    final locale = ref.watch(localeProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       initialRoute: '/',
-     locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
       routes: {
         '/': (context) => const SplashPage(),
         '/home': (context) => const HomePage(),

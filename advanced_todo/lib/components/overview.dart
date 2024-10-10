@@ -16,25 +16,25 @@ class Overview extends ConsumerWidget {
 
     final List<Map<String, dynamic>> types = [
       {
-        'title': 'Tasks',
+        'title': 'tasks',
         'description': allTasks.toString(),
         'icon': Ionicons.list,
         'color': const Color.fromRGBO(138, 163, 255, 0.965)
       },
       {
-        'title': 'Completed',
+        'title': 'completed',
         'description': completedTasks.length.toString(),
         'icon': Ionicons.checkmark_done_circle,
         'color': const Color.fromRGBO(20, 142, 1, 0.965)
       },
       {
-        'title': 'Pending',
+        'title': 'pending',
         'description': pendingTasks.length.toString(),
         'icon': Ionicons.hourglass,
         'color': const Color.fromRGBO(151, 71, 255, 0.965)
       },
       {
-        'title': 'Overdue',
+        'title': 'overdue',
         'description': overdueTasks.length.toString(),
         'icon': Ionicons.time,
         'color': const Color.fromRGBO(237, 190, 125, 0.965)

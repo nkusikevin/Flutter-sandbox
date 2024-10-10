@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:developer' as developer;
+
+
 
 // Task Model
 class Task {
@@ -180,18 +180,6 @@ final taskManagerProvider = StateNotifierProvider<TaskManager, List<Task>>((ref)
 
 final totalTasksProvider = Provider<int>((ref) {
   final tasks = ref.watch(taskManagerProvider);
-  
-  print('--- All Tasks ---');
-  for (var task in tasks) {
-    print(
-      'ID: ${task.id}, Name: ${task.name}, Date: ${task.date}, '
-      'Status: ${task.status}, Priority: ${task.priority}, '
-      'Category: ${task.category}, Completed: ${task.isCompleted}'
-    );
-  }
- print('--- End of Tasks ---');
-  print('Total number of tasks: ${tasks.length}');
-
   return tasks.length;
 });
 

@@ -56,8 +56,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
       // Add the new task using the TaskManager
       ref.read(taskManagerProvider.notifier).addTask(newTask);
 
-      // Navigate back to the previous screen
-      Navigator.of(context).pop();
+      Navigator.pushNamed(context, '/home');
     }
   }
 

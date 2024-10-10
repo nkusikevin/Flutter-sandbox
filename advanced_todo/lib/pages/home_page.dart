@@ -4,6 +4,7 @@ import 'package:advanced_todo/components/task_tile.dart';
 import 'package:advanced_todo/model/tasksDataModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -25,13 +26,13 @@ class HomePage extends ConsumerWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Delete Task'),
-            content: const Text('Are you sure you want to delete this task?'),
+            title: const Text('Delete Task').tr(),
+            content: const Text('Are you sure you want to delete this task?').tr(),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
-                  'Cancel',
+                  'Cancel'.tr(),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
@@ -42,8 +43,8 @@ class HomePage extends ConsumerWidget {
                   taskManager.deleteTask(id);
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  'Delete',
+                child: Text(
+                  'Delete'.tr(),
                   style: TextStyle(
                     color: Colors.red,
                   ),
@@ -70,7 +71,7 @@ class HomePage extends ConsumerWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Today\'s Tasks',
+                'todaysTasks'.tr(),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   fontSize: 18,
@@ -83,13 +84,13 @@ class HomePage extends ConsumerWidget {
           Expanded(
             child: todayTasks.isEmpty
                 ? Center(
-                    child: Text('No tasks for today'),
+                    child: const Text("noTasksToday").tr(),
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    itemCount: todayTasks.length,
+                    itemCount: tasks.length,
                     itemBuilder: (context, index) {
-                      final task = todayTasks[index];
+                      final task = tasks[index];
                       return TaskTile(
                         task: task,
                         onCompletionChanged: (bool? newValue) {

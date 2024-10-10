@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GridCard extends StatefulWidget {
   final String title;
@@ -39,11 +40,11 @@ class _GridCardState extends State<GridCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.title,
+                widget.title.tr(),
                 style:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               ),
-              // const SizedBox(height: 10),
+
               Text(
                 widget.description,
                 style:
