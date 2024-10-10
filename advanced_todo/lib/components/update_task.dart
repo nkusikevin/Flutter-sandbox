@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:date_field/date_field.dart';
 import 'package:advanced_todo/model/tasksDataModel.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UpdateTaskDialog extends ConsumerStatefulWidget {
   final Task task;
@@ -22,12 +23,12 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
   late String _category;
   late String _description;
 
-  final List<DropdownMenuEntry<String>> _categories = const [
-    DropdownMenuEntry(value: 'Work', label: 'Work'),
-    DropdownMenuEntry(value: 'Personal', label: 'Personal'),
-    DropdownMenuEntry(value: 'Health', label: 'Health'),
-    DropdownMenuEntry(value: 'Finance', label: 'Finance'),
-    DropdownMenuEntry(value: 'Other', label: 'Other'),
+  final List<DropdownMenuEntry<String>> _categories = [
+    DropdownMenuEntry(value: 'Work', label: 'work'.tr()),
+    DropdownMenuEntry(value: 'Personal', label: 'personal'.tr()),
+    DropdownMenuEntry(value: 'Health', label: 'health'.tr()),
+    DropdownMenuEntry(value: 'Finance', label: 'finance'.tr()),
+    DropdownMenuEntry(value: 'Other', label: 'other'.tr()),
   ];
 
   @override
@@ -72,11 +73,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
         priority: _getPriorityEnum(_priority),
         category: _getCategoryEnum(_category),
       );
-
-      // Update the task using the TaskManager
       ref.read(taskManagerProvider.notifier).updateTask(updatedTask);
-
-      // Close the dialog
       Navigator.of(context).pop();
     }
   }
@@ -108,7 +105,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Update Task'),
+      title: const Text('updateTask').tr(),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -117,13 +114,13 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
             children: [
               TextFormField(
                 initialValue: _taskName,
-                decoration: const InputDecoration(
-                  labelText: 'Task Name',
+                decoration: InputDecoration(
+                  labelText: 'taskName'.tr(),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a task name';
+                    return 'pleaseEnterTaskName'.tr();
                   }
                   return null;
                 },
@@ -138,7 +135,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                   initialSelection: _category,
                   dropdownMenuEntries: _categories,
                   width: double.infinity,
-                  label: const Text('Category'),
+                  label: Text('category').tr(),
                   onSelected: (String? value) {
                     setState(() {
                       _category = value ?? '';
@@ -149,8 +146,8 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
               const SizedBox(height: 10),
               DateTimeFormField(
                 initialValue: _selectedDate,
-                decoration: const InputDecoration(
-                  labelText: 'Enter Date',
+                decoration: InputDecoration(
+                  labelText: 'enterDate'.tr(),
                   border: OutlineInputBorder(),
                 ),
                 mode: DateTimeFieldPickerMode.date,
@@ -158,7 +155,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                 lastDate: DateTime.now().add(const Duration(days: 365)),
                 validator: (value) {
                   if (value == null) {
-                    return 'Please select a date';
+                    return 'pleaseSelectDate'.tr();
                   }
                   return null;
                 },
@@ -185,14 +182,14 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                         }
                       },
                       child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Start Time',
+                        decoration: InputDecoration(
+                          labelText: 'startTime'.tr(),
                           border: OutlineInputBorder(),
                         ),
                         child: Text(
                           _startTime != null
                               ? _startTime!.format(context)
-                              : 'Select Start Time',
+                              : 'selectStartTime'.tr(),
                         ),
                       ),
                     ),
@@ -212,14 +209,14 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                         }
                       },
                       child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'End Time',
+                        decoration: InputDecoration(
+                          labelText: 'endTime'.tr(),
                           border: OutlineInputBorder(),
                         ),
                         child: Text(
                           _endTime != null
                               ? _endTime!.format(context)
-                              : 'Select End Time',
+                              : 'selectEndTime'.tr(),
                         ),
                       ),
                     ),
@@ -239,7 +236,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            "High",
+                            "high".tr(),
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.surface),
                             textAlign: TextAlign.center,
@@ -259,7 +256,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            "Medium",
+                            "medium".tr(),
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.surface),
                             textAlign: TextAlign.center,
@@ -279,7 +276,7 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            "Low",
+                            "low".tr(),
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.surface),
                             textAlign: TextAlign.center,
@@ -293,8 +290,8 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
               const SizedBox(height: 10),
               TextFormField(
                 initialValue: _description,
-                decoration: const InputDecoration(
-                  labelText: 'Description',
+                decoration: InputDecoration(
+                  labelText: 'description'.tr(),
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 2,
@@ -305,13 +302,35 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+          child: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'cancel',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ).tr(),
+          ),
         ),
-        ElevatedButton(
-          onPressed: _submitForm,
-          child: const Text('Update Task'),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).colorScheme.primaryFixedDim,
+          ),
+          child: TextButton(
+            onPressed: _submitForm,
+            child: Text('updateTask',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                )).tr(),
+          ),
         ),
       ],
     );
