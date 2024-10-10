@@ -28,6 +28,7 @@ class Task {
     this.isCompleted = false,
   });
 
+// used this factory constructor is used to deserialize the json object to a task object after fetching it from shared preferences
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
       id: json['id'],
@@ -44,7 +45,7 @@ class Task {
       isCompleted: json['isCompleted'],
     );
   }
-
+// I used this method to serialize the task object to json before saving it to shared preferences
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -60,6 +61,7 @@ class Task {
     };
   }
 
+// this method is used to create a new task object with the updated values
   Task copyWith({
     String? id,
     String? name,
@@ -112,17 +114,17 @@ class TaskManager extends StateNotifier<List<Task>> {
     await prefs.setString('tasks', tasksJson);
   }
 
-  void addTask(Task task) {
+  Future<void> addTask(Task task) async {
     state = [...state, task];
-    _saveTasks();
+    await _saveTasks();
   }
 
-  void updateTask(Task updatedTask) {
+  Future<void> updateTask(Task updatedTask) async {
     state = [
       for (final task in state)
         if (task.id == updatedTask.id) updatedTask else task
     ];
-    _saveTasks();
+    await _saveTasks();
   }
 
   void toggleTaskCompletion(String id) {
@@ -131,9 +133,9 @@ class TaskManager extends StateNotifier<List<Task>> {
     updateTask(updatedTask);
   }
 
-  void deleteTask(String id) {
+  Future<void> deleteTask(String id) async {
     state = state.where((task) => task.id != id).toList();
-    _saveTasks();
+    await _saveTasks();
   }
 
   List<Task> getTasks() {

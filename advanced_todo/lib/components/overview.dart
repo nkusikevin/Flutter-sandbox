@@ -11,11 +11,6 @@ class Overview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final taskCo = ref.watch(tasksProvider);
 
-    print('Total tasks: ${taskCo['total']}');
-    print('Completed tasks: ${taskCo['completed']}');
-    print('Pending tasks: ${taskCo['pending']}');
-    print('Overdue tasks: ${taskCo['overdue']}');
-
     final List<Map<String, dynamic>> types = [
       {
         'title': 'tasks',

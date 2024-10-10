@@ -21,7 +21,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
   String _category = '';
   String _description = '';
 
-  final List<DropdownMenuEntry<String>> _categories =  [
+  final List<DropdownMenuEntry<String>> _categories = [
     DropdownMenuEntry(value: 'Work', label: 'work'.tr()),
     DropdownMenuEntry(value: 'Personal', label: 'personal'.tr()),
     DropdownMenuEntry(value: 'Health', label: 'health'.tr()),
@@ -105,7 +105,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
             children: [
               const SizedBox(height: 10),
               TextFormField(
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'taskName'.tr(),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
@@ -137,7 +137,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
               ),
               const SizedBox(height: 10),
               DateTimeFormField(
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'enterDate'.tr(),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
@@ -176,7 +176,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
                         }
                       },
                       child: InputDecorator(
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'startTime'.tr(),
                           border: OutlineInputBorder(),
                         ),
@@ -203,7 +203,7 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
                         }
                       },
                       child: InputDecorator(
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'endTime'.tr(),
                           border: OutlineInputBorder(),
                         ),
@@ -295,15 +295,23 @@ class _CreateTaskState extends ConsumerState<CreateTask> {
               const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(10),
+                  border:
+                      Border.all(color: Theme.of(context).colorScheme.tertiary),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
                 ),
                 width: double.infinity,
                 child: TextButton(
                   onPressed: _submitForm,
                   child: Text('createTask'.tr(),
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.surface)),
+                          color: Theme.of(context).colorScheme.inversePrimary)),
                 ),
               ),
             ],

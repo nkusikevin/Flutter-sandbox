@@ -322,7 +322,14 @@ class _UpdateTaskDialogState extends ConsumerState<UpdateTaskDialog> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.primaryFixedDim,
+            border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
           ),
           child: TextButton(
             onPressed: _submitForm,

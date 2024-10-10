@@ -39,12 +39,24 @@ class TaskTile extends StatelessWidget {
             child: ListTile(
               title: Text(
                 task.name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
+                  decoration: task.isCompleted
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                  color: task.isCompleted
+                      ? Theme.of(context).colorScheme.primaryFixedDim
+                      : Theme.of(context).colorScheme.inversePrimary,
                 ),
               ),
-              subtitle: Text('${task.startTime} - ${task.endTime}'),
+              subtitle: Text('${task.startTime} - ${task.endTime}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: task.isCompleted
+                        ? Theme.of(context).colorScheme.primaryFixedDim
+                        : Theme.of(context).colorScheme.inversePrimary,
+                  )),
             ),
           ),
           Row(
