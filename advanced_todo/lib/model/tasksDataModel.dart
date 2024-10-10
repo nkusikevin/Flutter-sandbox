@@ -140,26 +140,6 @@ class TaskManager extends StateNotifier<List<Task>> {
     return state;
   }
 
-  int getTotalTasks() {
-    return state.length;
-  }
-
-  List<Task> getCompletedTasks() {
-    return state.where((task) => task.status == 'completed').toList();
-  }
-
-  List<Task> getPendingTasks() {
-    return state.where((task) => task.status == 'pending').toList();
-  }
-
-  List<Task> getOverdueTasks() {
-    final now = DateTime.now();
-    return state.where((task) {
-      final taskDate = DateTime.parse(task.date);
-      return taskDate.isBefore(now) && task.status != 'completed';
-    }).toList();
-  }
-
   List<Task> filterTasks(
       {String? date, TaskPriority? priority, String? status}) {
     return state.where((task) {
@@ -177,21 +157,30 @@ final taskManagerProvider =
   return TaskManager();
 });
 
-final totalTasksProvider = Provider<int>((ref) {
+final tasksProvider = Provider<Map<String, int>>((ref) {
   final tasks = ref.watch(taskManagerProvider);
-  return tasks.length;
-});
+  final completedTasks = tasks
+      .where((task) => task.status == 'completed' || task.isCompleted)
+      .length;
+  final pendingTasks = tasks.where((task) => !task.isCompleted).length;
 
-final completedTasksProvider = Provider<List<Task>>((ref) {
-  return ref.watch(taskManagerProvider.notifier).getCompletedTasks();
-});
-
-final pendingTasksProvider = Provider<List<Task>>((ref) {
-  return ref.watch(taskManagerProvider.notifier).getPendingTasks();
-});
-
-final overdueTasksProvider = Provider<List<Task>>((ref) {
-  return ref.watch(taskManagerProvider.notifier).getOverdueTasks();
+  final overdueTasks = tasks.where((task) {
+    if (task.isCompleted) return false;
+    final taskDate = DateTime.parse(task.date);
+    final taskEndTime = DateTime.parse('${task.date} ${task.endTime}');
+    final now = DateTime.now();
+    return taskDate.isBefore(now.subtract(Duration(days: 1))) ||
+        (taskDate.year == now.year &&
+            taskDate.month == now.month &&
+            taskDate.day == now.day &&
+            taskEndTime.isBefore(now));
+  }).length;
+  return {
+    'total': tasks.length,
+    'completed': completedTasks,
+    'pending': pendingTasks,
+    'overdue': overdueTasks,
+  };
 });
 
 final filteredTasksProvider =

@@ -9,33 +9,35 @@ class Overview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allTasks = ref.watch(totalTasksProvider);
-    final completedTasks = ref.watch(completedTasksProvider);
-    final pendingTasks = ref.watch(pendingTasksProvider);
-    final overdueTasks = ref.watch(overdueTasksProvider);
+    final taskCo = ref.watch(tasksProvider);
+
+    print('Total tasks: ${taskCo['total']}');
+    print('Completed tasks: ${taskCo['completed']}');
+    print('Pending tasks: ${taskCo['pending']}');
+    print('Overdue tasks: ${taskCo['overdue']}');
 
     final List<Map<String, dynamic>> types = [
       {
         'title': 'tasks',
-        'description': allTasks.toString(),
+        'description': taskCo['total'].toString(),
         'icon': Ionicons.list,
         'color': const Color.fromRGBO(138, 163, 255, 0.965)
       },
       {
         'title': 'completed',
-        'description': completedTasks.length.toString(),
+        'description': taskCo['completed'].toString(),
         'icon': Ionicons.checkmark_done_circle,
         'color': const Color.fromRGBO(20, 142, 1, 0.965)
       },
       {
         'title': 'pending',
-        'description': pendingTasks.length.toString(),
+        'description': taskCo['pending'].toString(),
         'icon': Ionicons.hourglass,
         'color': const Color.fromRGBO(151, 71, 255, 0.965)
       },
       {
         'title': 'overdue',
-        'description': overdueTasks.length.toString(),
+        'description': taskCo['overdue'].toString(),
         'icon': Ionicons.time,
         'color': const Color.fromRGBO(237, 190, 125, 0.965)
       },
