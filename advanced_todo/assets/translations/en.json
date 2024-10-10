@@ -35,5 +35,6 @@
 	"selectEndTime": "Select End Time",
 	"pleaseEnterTaskName": "Please enter a task name",
 	"pleaseSelectDate": "Please select a date",
-	"language": "Language"
+	"language": "Language",
+	"all": "All"
 }

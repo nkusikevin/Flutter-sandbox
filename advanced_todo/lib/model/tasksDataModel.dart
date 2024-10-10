@@ -2,8 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-
-
 // Task Model
 class Task {
   final String id;
@@ -39,8 +37,10 @@ class Task {
       date: json['date'],
       description: json['description'],
       status: json['status'],
-      priority: TaskPriority.values.firstWhere((e) => e.toString() == 'TaskPriority.${json['priority']}'),
-      category: TaskCategory.values.firstWhere((e) => e.toString() == 'TaskCategory.${json['category']}'),
+      priority: TaskPriority.values.firstWhere(
+          (e) => e.toString() == 'TaskPriority.${json['priority']}'),
+      category: TaskCategory.values.firstWhere(
+          (e) => e.toString() == 'TaskCategory.${json['category']}'),
       isCompleted: json['isCompleted'],
     );
   }
@@ -160,7 +160,8 @@ class TaskManager extends StateNotifier<List<Task>> {
     }).toList();
   }
 
-  List<Task> filterTasks({String? date, TaskPriority? priority, String? status}) {
+  List<Task> filterTasks(
+      {String? date, TaskPriority? priority, String? status}) {
     return state.where((task) {
       bool dateMatch = date == null || task.date == date;
       bool priorityMatch = priority == null || task.priority == priority;
@@ -171,12 +172,10 @@ class TaskManager extends StateNotifier<List<Task>> {
 }
 
 // Providers
-final taskManagerProvider = StateNotifierProvider<TaskManager, List<Task>>((ref) {
+final taskManagerProvider =
+    StateNotifierProvider<TaskManager, List<Task>>((ref) {
   return TaskManager();
 });
-
-
-
 
 final totalTasksProvider = Provider<int>((ref) {
   final tasks = ref.watch(taskManagerProvider);
@@ -195,14 +194,34 @@ final overdueTasksProvider = Provider<List<Task>>((ref) {
   return ref.watch(taskManagerProvider.notifier).getOverdueTasks();
 });
 
-// Example of a filtered tasks provider
-final filteredTasksProvider = Provider.family<List<Task>, Map<String, dynamic>>((ref, filter) {
-  return ref.watch(taskManagerProvider.notifier).filterTasks(
-    date: filter['date'] as String?,
-    priority: filter['priority'] as TaskPriority?,
-    status: filter['status'] as String?,
-  );
+final filteredTasksProvider =
+    Provider.family<List<Task>, Map<String, dynamic>>((ref, filter) {
+  final tasks = ref.watch(taskManagerProvider);
+
+  return tasks.where((task) {
+    // Date filter
+    if (filter['date'] != null) {
+      final filterDate = DateTime.parse(filter['date'] as String);
+      final taskDate = DateTime.parse(task.date);
+      if (filterDate.year != taskDate.year ||
+          filterDate.month != taskDate.month ||
+          filterDate.day != taskDate.day) {
+        return false;
+      }
+    }
+
+    // Priority filter
+    if (filter['priority'] != null && task.priority != filter['priority']) {
+      return false;
+    }
+
+    // Status filter
+    if (filter['status'] != null && task.status != filter['status']) {
+      return false;
+    }
+
+    return true;
+  }).toList();
 });
 
-
-// final localeProvider = StateProvider<Locale>((ref) => const Locale('en'));
+final filterProvider = StateProvider<Map<String, dynamic>>((ref) => {});

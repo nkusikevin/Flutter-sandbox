@@ -35,5 +35,6 @@
 	"selectEndTime": "Sélectionner l'heure de fin",
 	"pleaseEnterTaskName": "Veuillez entrer un nom de tâche",
 	"pleaseSelectDate": "Veuillez sélectionner une date",
-	"language": "Langue"
+	"language": "Langue",
+	"all": "Toute"
 }
