@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "613877748599",
+    "project_id": "flutterauth-c307d",
+    "storage_bucket": "flutterauth-c307d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613877748599:android:f01f0c91c1e90a7ca90772",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdWI9wprAD3tPbIFFoLu4qpfMS92GV3ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613877748599:android:0a1e9396ce05ccaba90772",
+        "android_client_info": {
+          "package_name": "com.example.auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdWI9wprAD3tPbIFFoLu4qpfMS92GV3ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

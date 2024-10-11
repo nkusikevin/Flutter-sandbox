@@ -1,5 +1,7 @@
 import 'package:auth/components/custom_button.dart';
 import 'package:auth/components/custom_input.dart';
+// import 'package:auth/components/snackBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -8,6 +10,13 @@ class LoginPage extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  void signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text);
+
+    //  showCustomSnackBar(context, 'You are logged in!', 'success');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +29,7 @@ class LoginPage extends StatelessWidget {
               children: <Widget>[
                 const Icon(Ionicons.lock_closed, size: 50),
                 const SizedBox(height: 20),
-                const Text('Welcome back!',
-                    style: TextStyle(fontSize: 20)),
+                const Text('Welcome back!', style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 20),
                 CustomInput(
                     controller: emailController,
@@ -47,8 +55,7 @@ class LoginPage extends StatelessWidget {
                 CustomButton(
                     title: 'Login',
                     onPressed: () {
-                      print('Email: ${emailController.text}');
-                      print('Password: ${passwordController.text}');
+                      signIn();
                     }),
                 const SizedBox(height: 50),
                 Padding(
@@ -83,7 +90,7 @@ class LoginPage extends StatelessWidget {
                           color: Colors.grey[200],
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.circular(16)),
-                        margin: const EdgeInsets.only(right: 10),
+                      margin: const EdgeInsets.only(right: 10),
                       child: IconButton(
                           icon: const Icon(Ionicons.logo_google),
                           iconSize: 40,
@@ -91,7 +98,6 @@ class LoginPage extends StatelessWidget {
                             print('Google');
                           }),
                     ),
-                   
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
