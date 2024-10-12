@@ -3,25 +3,33 @@ import 'dart:math';
 import 'package:auth/components/custom_button.dart';
 import 'package:auth/components/custom_input.dart';
 import 'package:auth/components/snackBar.dart';
+import 'package:auth/register_page.dart';
+import 'package:auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:auth/services/auth_service.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function togglePage;
-  LoginPage({super.key, required this.togglePage});
+
+  const RegisterPage({super.key, required this.togglePage});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
+  final confirmPasswordController = TextEditingController();
+
   void signIn() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      showCustomSnackBar(context, 'Passwords do not match.', 'error');
+      return;
+    }
     showDialog(
         context: context,
         builder: (context) {
@@ -33,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         });
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -68,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   const Icon(Ionicons.lock_closed, size: 50),
                   const SizedBox(height: 20),
-                  const Text('Welcome back!', style: TextStyle(fontSize: 20)),
+                  const Text('Register', style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 20),
                   CustomInput(
                       controller: emailController,
@@ -80,19 +88,13 @@ class _LoginPageState extends State<LoginPage> {
                       hintText: 'Password',
                       obscureText: true),
                   const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('Forgot password?',
-                            style: TextStyle(color: Colors.grey[600])),
-                      ],
-                    ),
-                  ),
+                  CustomInput(
+                      controller: confirmPasswordController,
+                      hintText: 'Comfirm Password',
+                      obscureText: true),
                   const SizedBox(height: 20),
                   CustomButton(
-                      title: 'Login',
+                      title: 'Register',
                       onPressed: () {
                         signIn();
                       }),
@@ -156,13 +158,13 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Don\'t have an account?',
+                      Text('Already have an account?',
                           style: TextStyle(color: Colors.grey[600])),
                       TextButton(
                           onPressed: () {
                             widget.togglePage();
                           },
-                          child: const Text('Sign up',
+                          child: const Text('Sign in',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold))),

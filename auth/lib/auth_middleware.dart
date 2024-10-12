@@ -1,4 +1,5 @@
 import 'package:auth/home_page.dart';
+import 'package:auth/login_or_register.dart';
 import 'package:auth/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,9 @@ class AuthPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return const Center(child: Text('An error occurred.'));
           } else if (snapshot.hasData) {
-            return  HomePage();
+            return HomePage();
           } else {
-            return LoginPage();
+            return LoginOrRegister();
           }
         },
       ),

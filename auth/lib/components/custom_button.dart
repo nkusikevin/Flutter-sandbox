@@ -16,9 +16,9 @@ class CustomButton extends StatelessWidget {
           color: Colors.black,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Center(
-          child: Text('Login',
-              style: TextStyle(
+        child: Center(
+          child: Text(title,
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold)),
