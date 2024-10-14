@@ -16,7 +16,7 @@ abstract class TodoRepo {
   Future<List<Todo>> getTodos();
   Future<void> addTodo(Todo todo);
   Future<void> updateTodo(Todo todo);
-  Future<void> deleteTodoById(Todo todo);
+  Future<void> deleteTodo(Todo todo);
 }
 
 
